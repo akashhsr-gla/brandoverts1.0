@@ -6,6 +6,7 @@ import Header from '@/Components/header'
 import { FaCode, FaMobile, FaVideo, FaRocket, FaEllipsisH, FaTimes, FaArrowRight, FaCheck, FaWhatsapp, FaPhone } from 'react-icons/fa'
 import { motion, AnimatePresence } from 'framer-motion'
 import useFormSubmit from '@/hooks/useFormSubmit' // Add this import
+import { IoCall } from 'react-icons/io5'
 
 export default function ServicesPage() {
   const [selectedService, setSelectedService] = useState(null)
@@ -107,7 +108,7 @@ export default function ServicesPage() {
       name: 'Digital Marketing', 
       desc: 'Growth-focused strategies', 
       color: '#c60000',
-      longDesc: 'Brandovert offers data-driven digital marketing services including SEO, PPC, social media management, email campaigns, and content marketing. Our strategies are designed to boost visibility, engagement, and conversions.',
+      longDesc: 'Brandoverts offers data-driven digital marketing services including SEO, PPC, social media management, email campaigns, and content marketing. Our strategies are designed to boost visibility, engagement, and conversions.',
       features: [
         'SEO Optimization',
         'PPC Campaigns',
@@ -261,7 +262,7 @@ export default function ServicesPage() {
                             href="tel:+918235377886" 
                             className="flex-1 inline-flex items-center justify-center px-4 py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-300"
                           >
-                            <FaPhone className="mr-2" />
+                            <IoCall className="mr-2" />
                             Call Us
                           </a>
                         </div>
@@ -286,7 +287,7 @@ export default function ServicesPage() {
                       <div className="mt-8 p-6 border border-gray-200 rounded-lg">
                         <h3 className="text-xl font-bold text-gray-800 mb-4">Why Choose Us</h3>
                         <p className="text-gray-700 mb-4">
-                          At Brandovert, we combine creativity with technical expertise to deliver solutions 
+                          At Brandoverts, we combine creativity with technical expertise to deliver solutions 
                           that not only look great but also perform exceptionally well.
                         </p>
                         <p className="text-gray-700">
@@ -342,7 +343,7 @@ export default function ServicesPage() {
                       value={formData.email}
                       onChange={handleChange}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#c60000] focus:border-transparent transition-all" 
-                      placeholder="your@email.com" 
+                      placeholder="brandoverts@gmail.com" 
                       required 
                     /> 
                   </div> 

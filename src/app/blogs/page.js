@@ -7,6 +7,7 @@ import Header from '@/Components/header'
 import { useState, useEffect } from 'react' // Update this import
 import { FaArrowLeft, FaArrowRight, FaPhone, FaWhatsapp } from 'react-icons/fa'
 import useFormSubmit from '@/hooks/useFormSubmit' // Add this import
+import { IoCall } from "react-icons/io5";
 
 export default function BlogsPage() {
   const [selectedService, setSelectedService] = useState('')
@@ -66,15 +67,16 @@ export default function BlogsPage() {
             transition={{ duration: 0.8 }}
             className="max-w-4xl mx-auto text-center"
           >
-            <div className="relative w-80 h-80 mx-auto mb-8">
-              <Image
-                src="/logo.png"
-                alt="Brandovert Logo"
-                fill
-                priority
-                className="object-contain"
-              />
-            </div>
+           <div className="relative w-4/5 max-w-xs aspect-square mx-auto mb-8">
+  <Image
+    src="/logo.png"
+    alt="Brandovert Logo"
+    fill
+    priority
+    className="object-contain"
+  />
+</div>
+
             
             <motion.h1 
               initial={{ opacity: 0 }}
@@ -157,7 +159,7 @@ export default function BlogsPage() {
                       value={formData.email}
                       onChange={handleChange}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#c60000] focus:border-transparent transition-all"
-                      placeholder="your@email.com"
+                      placeholder="brandoverts@gmail.com"
                       required
                     />
                   </div>
@@ -214,14 +216,14 @@ export default function BlogsPage() {
         {/* Floating Action Buttons */}
         <div className="fixed bottom-6 right-6 flex flex-col gap-4 z-50">
           <motion.a
-            href="tel:+919876543210"
+            href="tel:+919153832948"
             whileHover={{ scale: 1.1 }}
             className="p-3 md:p-4 rounded-full bg-[#c60000] text-white hover:bg-white hover:text-[#c60000] border border-[#c60000] transition-all"
           >
-            <FaPhone className="text-xl md:text-2xl" />
+            <IoCall className="text-xl md:text-2xl" />
           </motion.a>
           <motion.a
-            href="https://wa.me/+919876543210"
+            href="https://wa.me/+919153832948"
             target="_blank"
             rel="noopener noreferrer"
             whileHover={{ scale: 1.1 }}

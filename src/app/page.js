@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Header from '@/Components/header'
 import { FaCode, FaMobile, FaVideo, FaRocket, FaEllipsisH, FaPhone, FaWhatsapp, FaArrowRight, FaTimes } from 'react-icons/fa'
+import { IoCall } from "react-icons/io5";
 import { motion, AnimatePresence } from 'framer-motion'
 import useFormSubmit from '@/hooks/useFormSubmit' // Add this import
 
@@ -148,7 +149,8 @@ export default function Home() {
       <Header />
       <main className="min-h-screen bg-white">
         {/* Hero Section */}
-        <section className="relative min-h-screen flex items-center pt-20 md:pt-0 bg-custom-gradient">
+        <section className="relative min-h-screen flex items-center pt-20 md:pt-0 bg-gradient-to-b from-red-600 via-red-200 to-white">
+
             <div className="absolute inset-0 bg-custom-gradient" />
           <div className="absolute inset-0 bg-[url('/noise.png')] opacity-5" />
           <div className="container mx-auto px-4 relative z-10">
@@ -158,15 +160,17 @@ export default function Home() {
               transition={{ duration: 1 }}
               className="text-center max-w-5xl mx-auto"
             >
-              <div className="mb-0 md:mb-0 relative w-150 h-150 md:w-150 md:h-150 mx-auto">
-                <Image
-                  src="/logo.png"
-                  alt="Brandovert Logo"
-                  fill
-                  className="object-contain"
-                  priority
-                />
-              </div>
+             <div className="relative w-full max-w-[200px] aspect-square mx-auto">
+  <Image
+    src="/hero.png"
+    alt="Brandovert Logo"
+    fill
+    className="object-contain"
+    priority
+  />
+</div>
+
+
               <h1 className="text-4xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold mb-4 md:mb-6 text-[#c60000] leading-tight">
                 Transform Your Brand Identity
               </h1>
@@ -292,7 +296,7 @@ export default function Home() {
                       value={formData.email}
                       onChange={handleChange}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#c60000] focus:border-transparent transition-all"
-                      placeholder="your@email.com"
+                      placeholder="brandoverts@gmail.com"
                       required
                     />
                   </div>
@@ -343,14 +347,14 @@ export default function Home() {
         {/* Floating Action Buttons */}
         <div className="fixed bottom-6 right-6 flex flex-col gap-4 z-50">
           <motion.a
-            href="tel:+919876543210"
+            href="tel:+919153832948"
             whileHover={{ scale: 1.1 }}
             className="p-3 md:p-4 rounded-full bg-[#c60000] text-white hover:bg-white hover:text-[#c60000] border border-[#c60000] transition-all"
           >
-            <FaPhone className="text-xl md:text-2xl" />
+            <IoCall className="text-xl md:text-2xl" />
           </motion.a>
           <motion.a
-            href="https://wa.me/+919876543210"
+            href="https://wa.me/+919153832948"
             target="_blank"
             rel="noopener noreferrer"
             whileHover={{ scale: 1.1 }}
@@ -417,7 +421,7 @@ export default function Home() {
                 <div className="mt-6 md:mt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
                   <div className="flex items-center gap-3 w-full sm:w-auto">
                     <motion.a
-                      href="https://wa.me/+919876543210"
+                      href="https://wa.me/+919153832948"
                       target="_blank"
                       rel="noopener noreferrer"
                       whileHover={{ scale: 1.05 }}
@@ -428,14 +432,14 @@ export default function Home() {
                       <span className="font-medium text-sm md:text-base">WhatsApp</span>
                     </motion.a>
                     <motion.a
-                      href="tel:+919876543210"
+                      href="tel:+919153832948"
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       className="flex items-center gap-2 px-3 md:px-4 py-2 bg-[#c60000] text-white hover:bg-white hover:text-[#c60000] border border-[#c60000] rounded-lg transition-all w-full sm:w-auto justify-center"
                     >
                       <a href="tel:+918235377886" className="flex flex-col items-center">
   <div>
-    <FaPhone className="text-xl" />
+    <IoCall className="text-xl" />
   </div>
   <span className="text-sm text-[#333]">Call</span>
 </a>

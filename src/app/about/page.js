@@ -3,7 +3,8 @@ import Header from '@/Components/header'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState } from 'react'; // Import useState if not already present
-import { FaWhatsapp, FaPhone, FaEnvelope, FaInstagram, FaLinkedin, FaBars, FaTimes, FaArrowRight } from 'react-icons/fa' // Import necessary icons if not already present
+import { FaWhatsapp, FaPhone, FaEnvelope, FaInstagram, FaLinkedin, FaBars, FaTimes, FaArrowRight } from 'react-icons/fa' 
+import { IoCall } from "react-icons/io5";// Import necessary icons if not already present
 
 export default function AboutPage() {
   const founders = [
@@ -11,7 +12,7 @@ export default function AboutPage() {
       name: "Yuvraj Singh",
       position: "Co-Founder & CEO",
       image: "/IMG_20240604_024051_211 (1).webp",
-      bio: "Leads strategic vision and business development at Brandovert."
+      bio: "Leads strategic vision and business development at Brandoverts."
     },
     {
       name: "Akash Singh",
@@ -55,7 +56,7 @@ export default function AboutPage() {
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#333]">
               Meet Our <span className="text-[#c60000]">Founders</span>
             </h2>
-            <p className="text-lg text-gray-700 mb-12">The visionaries behind Brandovert's mission and success</p>
+            <p className="text-lg text-gray-700 mb-12">The visionaries behind Brandoverts mission and success</p>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {founders.map((founder, index) => (
@@ -222,7 +223,7 @@ export default function AboutPage() {
                 <div className="mt-6 md:mt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
                   <div className="flex items-center gap-3 w-full sm:w-auto">
                     <motion.a
-                      href="https://wa.me/+919876543210"
+                      href="https://wa.me/+919153832948"
                       target="_blank"
                       rel="noopener noreferrer"
                       whileHover={{ scale: 1.05 }}
@@ -233,13 +234,13 @@ export default function AboutPage() {
                       <span className="font-medium text-sm md:text-base">WhatsApp</span>
                     </motion.a>
                     <motion.a
-                      href="tel:+919876543210"
+                      href="tel:+919153832948"
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       className="flex items-center gap-2 px-3 md:px-4 py-2 bg-[#c60000] text-white hover:bg-white hover:text-[#c60000] border border-[#c60000] rounded-lg transition-all w-full sm:w-auto justify-center"
                     >
                       <a href="tel:+918235377886" className="flex items-center space-x-2">
-  <FaPhone className="text-lg md:text-xl" />
+  <IoCall className="text-lg md:text-xl" />
   <span className="font-medium text-sm md:text-base">Call Now</span>
 </a>
                     </motion.a>

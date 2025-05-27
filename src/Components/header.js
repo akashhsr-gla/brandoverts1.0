@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { FaWhatsapp, FaPhone, FaEnvelope, FaInstagram, FaLinkedin, FaBars, FaTimes, FaArrowRight } from 'react-icons/fa'
 import { motion, AnimatePresence } from 'framer-motion'
+import { IoCall } from "react-icons/io5";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -92,7 +93,7 @@ export default function Header() {
             <div className="hidden md:flex items-center space-x-4">
               <div className="flex items-center space-x-2 mr-2">
                 <motion.a
-                  href="https://wa.me/+919876543210"
+                  href="https://wa.me/+919153832948"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-2.5 rounded-md bg-[#c60000] hover:bg-white hover:text-[#c60000] text-white border border-[#c60000] transition-all duration-200 flex items-center justify-center"
@@ -103,13 +104,13 @@ export default function Header() {
                   <FaWhatsapp className="text-lg" />
                 </motion.a>
                 <motion.a
-                  href="tel:+919876543210"
+                  href="tel:+919153832948"
                   className="p-2.5 rounded-md bg-[#c60000] hover:bg-white hover:text-[#c60000] text-white border border-[#c60000] transition-all duration-200 flex items-center justify-center"
                   aria-label="Phone"
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <FaPhone className="text-lg" />
+                  <IoCall className="text-lg" />
                 </motion.a>
               </div>
               
@@ -281,14 +282,14 @@ export default function Header() {
                     <span className="text-sm text-[#333]">WhatsApp</span>
                   </motion.a>
                   <motion.a
-                    href="tel:+919876543210"
+                    href="tel:+919153832948"
                     className="flex flex-col items-center"
                     aria-label="Phone"
                     whileHover={{ scale: 1.05 }}
                   >
                     <a href="tel:+918235377886" className="flex flex-col items-center">
   <div className="p-3 mb-2 rounded-md bg-[#c60000] hover:bg-white hover:text-[#c60000] text-white border border-[#c60000] transition-all duration-200">
-    <FaPhone className="text-xl" />
+    <IoCall className="text-xl" />
   </div>
   <span className="text-sm text-[#333]">Call</span>
 </a>

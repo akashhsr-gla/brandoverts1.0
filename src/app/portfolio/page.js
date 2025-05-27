@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Image from 'next/image'
 import Header from '@/Components/header'
 import { FaFolder, FaArrowRight, FaCheck, FaEnvelope, FaPhone, FaWhatsapp } from 'react-icons/fa'
+import { IoCall } from "react-icons/io5";
 import { motion } from 'framer-motion'
 import useFormSubmit from '@/hooks/useFormSubmit'
 
@@ -102,7 +103,7 @@ export default function PortfolioPage() {
                 Our Portfolio
               </h1>
               <p className="text-lg md:text-xl text-gray-700 mb-12 max-w-3xl mx-auto">
-                At Brandovert, we collaborate with ambitious brands to create impactful digital solutions. 
+                At Brandoverts, we collaborate with ambitious brands to create impactful digital solutions. 
                 Here are some of our recent projects.
               </p>
             </motion.div>
@@ -203,16 +204,16 @@ export default function PortfolioPage() {
                     <h3 className="text-2xl font-bold mb-6">Contact Information</h3>
                     <div className="space-y-4">
                       <div className="flex items-center">
-                        <FaPhone className="mr-3" />
-                        <a href="tel:+919876543210" className="hover:underline">+91 98765 43210</a>
+                        <IoCall className="mr-3" />
+                        <a href="tel:+919153832948" className="hover:underline">+91 9153832948</a>
                       </div>
                       <div className="flex items-center">
                         <FaWhatsapp className="mr-3" />
-                        <a href="https://wa.me/919876543210" className="hover:underline">WhatsApp Us</a>
+                        <a href="https://wa.me/919153832948" className="hover:underline">WhatsApp Us</a>
                       </div>
                       <div className="flex items-center">
                         <FaEnvelope className="mr-3" />
-                        <a href="mailto:info@brandovert.com" className="hover:underline">info@brandovert.com</a>
+                        <a href="mailto:brandoverts@gmail.com" className="hover:underline">brandoverts@gmail.com</a>
                       </div>
                     </div>
                     <div className="mt-12">
@@ -246,7 +247,7 @@ export default function PortfolioPage() {
                             value={formData.email}
                             onChange={handleChange}
                             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#c60000] focus:border-transparent transition-all"
-                            placeholder="your@email.com"
+                            placeholder="brandoverts@gmail.com"
                             required
                           />
                         </div>
