@@ -149,7 +149,7 @@ export default function Home() {
       <Header />
       <main className="min-h-screen bg-white">
         {/* Hero Section */}
-        <section className="relative min-h-screen flex items-center pt-20 md:pt-0 bg-gradient-to-b from-red-600 via-red-200 to-white">
+        <section className="relative min-h-[90vh] flex items-center pt-10 md:pt-0 bg-gradient-to-b from-red-600 via-red-200 to-white">
 
             <div className="absolute inset-0 bg-custom-gradient" />
           <div className="absolute inset-0 bg-[url('/noise.png')] opacity-5" />
@@ -160,7 +160,7 @@ export default function Home() {
               transition={{ duration: 1 }}
               className="text-center max-w-5xl mx-auto"
             >
-           <div className="relative w-[135%] max-w-[270px] aspect-square mx-auto sm:w-full sm:max-w-[200px]">
+           <div className="relative w-[78%] mx-auto sm:w-[60%] md:w-[40%] lg:w-[30%] max-w-[300px] aspect-square">
   <Image
     src="/hero.png"
     alt="Brandovert Logo"
@@ -171,14 +171,14 @@ export default function Home() {
 </div>
 
 
-              <h1 className="text-4xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold mb-4 md:mb-6 text-[#c60000] leading-tight">
+              <h1 className="text-3xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold mb-2 md:mb-4 text-[#c60000] leading-tight">
                 Transform Your Brand Identity
               </h1>
               <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5, duration: 0.8 }}
-                className="text-lg md:text-xl lg:text-2xl text-gray-700 mb-8 md:mb-12 max-w-3xl mx-auto px-2"
+                className="text-base md:text-lg lg:text-xl text-gray-700 mb-4 md:mb-8 max-w-3xl mx-auto px-2"
               >
                 We craft exceptional digital experiences that elevate your brand presence 
                 and drive meaningful connections with your audience.
@@ -187,11 +187,11 @@ export default function Home() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.8, duration: 0.5 }}
-                className="flex flex-wrap justify-center gap-4 md:gap-6"
+                className="flex flex-wrap justify-center gap-3 md:gap-6"
               >
                 <a 
   href="#enquiry" 
-  className="btn-primary bg-[#c60000] hover:bg-[#a80000] text-white group text-sm md:text-base px-6 py-3 rounded-md transition-all duration-200 border border-[#c60000]"
+  className="btn-primary bg-[#c60000] hover:bg-[#a80000] text-white group text-xs md:text-base px-4 py-2 rounded-md transition-all duration-200 border border-[#c60000]"
 >
   Start Your Project
   <FaArrowRight className="inline-block ml-2 group-hover:translate-x-1 transition-transform" />
@@ -199,7 +199,7 @@ export default function Home() {
 
 <a 
   href="#services" 
-  className="btn-primary bg-[#c60000] hover:bg-[#a80000] text-white text-sm md:text-base px-6 py-3 rounded-md transition-all duration-200 border border-[#c60000]"
+  className="btn-primary bg-[#c60000] hover:bg-[#a80000] text-white text-xs md:text-base px-4 py-2 rounded-md transition-all duration-200 border border-[#c60000]"
 >
   Explore Services
 </a>
@@ -211,7 +211,7 @@ export default function Home() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.2, duration: 1 }}
-            className="absolute bottom-10 left-1/2 transform -translate-x-1/2 hidden md:block"
+            className="absolute bottom-5 left-1/2 transform -translate-x-1/2 hidden md:block"
           >
             <div className="animate-bounce">
               <FaArrowRight className="rotate-90 text-2xl text-[#c60000]" />
@@ -296,7 +296,7 @@ export default function Home() {
                       value={formData.email}
                       onChange={handleChange}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#c60000] focus:border-transparent transition-all"
-                      placeholder="brandoverts@gmail.com"
+                      placeholder="example@gmail.com"
                       required
                     />
                   </div>

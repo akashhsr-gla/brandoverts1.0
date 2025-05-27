@@ -237,7 +237,7 @@ export default function Header() {
                 
                 <div className="flex justify-start space-x-4">
                   <motion.a
-                    href="https://instagram.com/brandovert"
+                    href="https://instagram.com/brandoverts"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-[#c60000] bg-white p-4 rounded-md border border-[#c60000] hover:bg-[#c60000] hover:text-white transition-all duration-200"
