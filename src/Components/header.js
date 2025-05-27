@@ -51,21 +51,22 @@ export default function Header() {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <Link href="/" className="flex items-center group">
-              <motion.div 
-                className="relative w-50 h-20"
-                whileHover={{ scale: 1.05 }}
-                transition={{ duration: 0.2 }}
-              >
-                <Image
-                  src="/logo.png"
-                  alt="Brandovert Logo"
-                  fill
-                  priority
-                  className="object-contain"
-                />
-              </motion.div>
-            </Link>
+            <Link href="/" className="flex items-center group p-0 m-0">
+  <motion.div 
+    className="relative w-28 h-10 sm:w-32 sm:h-12" // Responsive size
+    whileHover={{ scale: 1.05 }}
+    transition={{ duration: 0.2 }}
+  >
+    <Image
+      src="/logo.png"
+      alt="Brandovert Logo"
+      fill
+      priority
+      className="object-contain"
+    />
+  </motion.div>
+</Link>
+
 
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center space-x-8">
@@ -184,7 +185,7 @@ export default function Header() {
               <FaTimes className="text-xl" />
             </motion.button>
             
-            <div className="flex flex-col h-full bg-white pt-[72px]">
+            <div className="flex flex-col h-full bg-white pt-[12px]">
               {/* Logo in Mobile Menu */}
               <div className="px-6 pt-6 pb-4 border-b-2 border-[#c60000] bg-white">
                 <div className="relative w-36 h-14 mx-auto">
@@ -202,7 +203,7 @@ export default function Header() {
               <nav className="flex flex-col p-6 bg-white">
                 <div className="relative mb-6">
                   <h2 className="text-xl font-bold text-[#333]">Navigation</h2>
-                  <div className="absolute bottom-0 left-0 w-16 h-1 bg-[#c60000]"></div>
+                  <div className="absolute bottom-0 left-0 w-16 h-0.5 bg-[#c60000]"></div>
                 </div>
                 
                 {navLinks.map((link, index) => (
@@ -231,7 +232,7 @@ export default function Header() {
               <div className="px-6 py-6 border-t border-gray-200 bg-white">
                 <div className="relative mb-6">
                   <h2 className="text-xl font-bold text-[#333]">Connect</h2>
-                  <div className="absolute bottom-0 left-0 w-16 h-1 bg-[#c60000]"></div>
+                  <div className="absolute bottom-0 left-0 w-16 h-0.5 bg-[#c60000]"></div>
                 </div>
                 
                 <div className="flex justify-start space-x-4">
@@ -264,7 +265,7 @@ export default function Header() {
               <div className="mt-auto p-6 border-t border-gray-200 bg-white">
                 <div className="relative mb-6">
                   <h2 className="text-xl font-bold text-[#333]">Contact Us</h2>
-                  <div className="absolute bottom-0 left-0 w-16 h-1 bg-[#c60000]"></div>
+                  <div className="absolute bottom-0 left-0 w-16 h-0.5 bg-[#c60000]"></div>
                 </div>
                 
                 <div className="grid grid-cols-3 gap-3 mb-6">
@@ -296,7 +297,7 @@ export default function Header() {
 
                   </motion.a>
                   <motion.a
-                    href="mailto:contact@brandovert.com"
+                    href="mailto:brandoverts@gmail.com"
                     className="flex flex-col items-center"
                     aria-label="Email"
                     whileHover={{ scale: 1.05 }}
@@ -308,41 +309,26 @@ export default function Header() {
                   </motion.a>
                 </div>
                 
-                <div className="grid grid-cols-2 gap-4">
-                  <motion.div
-                    whileHover={{ scale: 1.03 }}
-                    whileTap={{ scale: 0.97 }}
-                  >
-                    <Link
-                      href="#enquiry"
-                      className="w-full py-3 bg-[#c60000] text-white rounded-md
-                              hover:bg-white hover:text-[#c60000] border border-[#c60000]
-                              transition-all duration-200 font-medium text-lg text-center flex items-center justify-center"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      Get a Quote
-                      <FaArrowRight className="ml-2 text-sm" />
-                    </Link>
-                  </motion.div>
-                  
-                  {/* Removed Login Link */}
-                  {/*
-                  <motion.div
-                    whileHover={{ scale: 1.03 }}
-                    whileTap={{ scale: 0.97 }}
-                  >
-                    <Link
-                      href="/login"
-                      className="w-full py-3 bg-white text-[#c60000] rounded-md
-                              hover:bg-[#c60000] hover:text-white border border-[#c60000]
-                              transition-all duration-200 font-medium text-lg text-center flex items-center justify-center"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      Login
-                    </Link>
-                  </motion.div>
-                  */}
-                </div>
+                <div className="w-full">
+  <motion.div
+    whileHover={{ scale: 1.03 }}
+    whileTap={{ scale: 0.97 }}
+    className="w-full"
+  >
+    <Link
+      href="#enquiry"
+      className="w-full block py-3 bg-[#c60000] text-white rounded-md
+                 hover:bg-white hover:text-[#c60000] border border-[#c60000]
+                 transition-all duration-200 font-medium text-lg text-center
+                 flex items-center justify-center"
+      onClick={() => setIsMenuOpen(false)}
+    >
+      Get a Quote
+      <FaArrowRight className="ml-2 text-sm" />
+    </Link>
+  </motion.div>
+</div>
+
               </div>
             </div>
           </motion.div>

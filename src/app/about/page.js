@@ -37,7 +37,7 @@ export default function AboutPage() {
     <>
       <Header/> {/* Add the Header component here */}
       {/* Removed the extra <br></br> tag */}
-      <main className="pt-24 pb-16 bg-white">
+      <main className="pt-24 pb-16 bg-white mt-7">
         {/* Hero Section */}
         <section className="container mx-auto px-4 mb-16 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-6 text-[#333]">

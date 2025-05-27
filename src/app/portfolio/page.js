@@ -47,7 +47,7 @@ export default function PortfolioPage() {
       icon: '🔵',
       title: 'Adolaa',
       category: 'Website Development',
-      description: 'We&#39;re currently building a modern, responsive website for Adolaa, designed to elevate their digital presence and drive engagement. The project focuses on clean UI/UX, optimized performance, and seamless functionality across devices.',
+      description: 'We are currently building a modern, responsive website for Adolaa, designed to elevate their digital presence and drive engagement. The project focuses on clean UI/UX, optimized performance, and seamless functionality across devices.',
       status: 'In Progress',
       color: '#007bff'
     },

@@ -160,7 +160,7 @@ export default function Home() {
               transition={{ duration: 1 }}
               className="text-center max-w-5xl mx-auto"
             >
-             <div className="relative w-full max-w-[200px] aspect-square mx-auto">
+           <div className="relative w-[135%] max-w-[270px] aspect-square mx-auto sm:w-full sm:max-w-[200px]">
   <Image
     src="/hero.png"
     alt="Brandovert Logo"
@@ -437,11 +437,11 @@ export default function Home() {
                       whileTap={{ scale: 0.95 }}
                       className="flex items-center gap-2 px-3 md:px-4 py-2 bg-[#c60000] text-white hover:bg-white hover:text-[#c60000] border border-[#c60000] rounded-lg transition-all w-full sm:w-auto justify-center"
                     >
-                      <a href="tel:+918235377886" className="flex flex-col items-center">
+                      <a href="tel:+918235377886" className="flex flex-row justify-between">
   <div>
-    <IoCall className="text-xl" />
+    <IoCall className="text-lg md:text-xl mr-2" />
   </div>
-  <span className="text-sm text-[#333]">Call</span>
+  <span className="font-medium text-sm md:text-base"> Call</span>
 </a>
                     </motion.a>
                   </div>
