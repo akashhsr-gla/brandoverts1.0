@@ -46,7 +46,7 @@ export default function PortfolioPage() {
       icon: '🔵',
       title: 'Adolaa',
       category: 'Website Development',
-      description: 'We\'re currently building a modern, responsive website for Adolaa, designed to elevate their digital presence and drive engagement. The project focuses on clean UI/UX, optimized performance, and seamless functionality across devices.',
+      description: 'We&#39;re currently building a modern, responsive website for Adolaa, designed to elevate their digital presence and drive engagement. The project focuses on clean UI/UX, optimized performance, and seamless functionality across devices.',
       status: 'In Progress',
       color: '#007bff'
     },
@@ -161,7 +161,7 @@ export default function PortfolioPage() {
                 Ready to Start Your Project?
               </h2>
               <p className="text-lg text-gray-600 mb-8">
-                Let's collaborate to create a digital solution that drives results for your business.
+                Let&rsquo;s collaborate to create a digital solution that drives results for your business.
               </p>
               <motion.div
                 whileHover={{ scale: 1.03 }}
@@ -192,7 +192,7 @@ export default function PortfolioPage() {
                 Get in Touch
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                Have a project in mind? Fill out the form below and we'll get back to you shortly.
+                Have a project in mind? Fill out the form below and we&rsquo;ll get back to you shortly.
               </p>
             </motion.div>
 

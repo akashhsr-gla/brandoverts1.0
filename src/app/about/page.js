@@ -43,7 +43,7 @@ export default function AboutPage() {
             About <span className="text-[#c60000]">Brandoverts</span>
           </h1>
           <p className="text-lg md:text-xl text-gray-700 mb-8">
-            We believe in crafting intelligent, performance-driven solutions that power real business growth. We're not just an agency — we're your end-to-end partner in building brands, scaling digital presence, and unlocking potential through smart technology and sharp strategy.
+            We believe in crafting intelligent, performance-driven solutions that power real business growth. We&rsquo;re not just an agency — we&rsquo;re your end-to-end partner in building brands, scaling digital presence, and unlocking potential through smart technology and sharp strategy.
           </p>
           <p className="text-lg md:text-xl font-medium text-[#c60000]">
             We bring complete solutions under one roof, aligning creativity with code, and performance with purpose.

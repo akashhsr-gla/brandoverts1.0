@@ -134,7 +134,7 @@ export default function BlogsPage() {
               transition={{ duration: 0.8 }}
               className="bg-white shadow-lg rounded-lg p-6 md:p-8 mt-8 md:mt-16 border border-[#c60000]/20"
             >
-              // Update the form in the Enquiry Section
+              {/* Update the form in the Enquiry Section */}
               <form className="space-y-6 md:space-y-8" onSubmit={handleSubmit}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                   <div>
