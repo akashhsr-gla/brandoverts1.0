@@ -34,6 +34,33 @@ const LeadSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
+  projectStatus: {
+    type: String,
+    enum: [
+      'First call',
+      'Follow-up call',
+      'Meet',
+      'MoU sent',
+      'MoU signed',
+      'Development Phase 1',
+      'Development Phase 2',
+      'Development Phase 3',
+      'Development Phase 4',
+      'Deployment',
+      'Management',
+      'Termination'
+    ],
+    default: 'First call'
+  },
+  statusComment: {
+    type: String,
+    trim: true,
+    maxlength: 100 // approximately 20 words
+  },
+  assignedTo: {
+    type: String,
+    trim: true
+  },
   checkboxes: {
     titleMeet: {
       type: Boolean,
@@ -52,6 +79,10 @@ const LeadSchema = new mongoose.Schema({
     {
       stepNumber: Number,
       text: String,
+      assignedTo: {
+        type: String,
+        trim: true
+      },
       timestamp: {
         type: Date,
         default: Date.now,

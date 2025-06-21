@@ -4,17 +4,37 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { motion } from 'framer-motion';
-import { FaSpinner, FaCalendarAlt, FaClock } from 'react-icons/fa';
+import { FaSpinner, FaCalendarAlt, FaChevronLeft, FaChevronRight, FaClock, FaBell } from 'react-icons/fa';
 import toast from 'react-hot-toast';
 import LeadsNavbar from '@/Components/LeadsNavbar';
 
-export default function ReminderPage() {
+// Helper functions for date manipulation
+const getDaysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
+const getFirstDayOfMonth = (year, month) => new Date(year, month, 1).getDay();
+const formatDate = (date) => date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+
+// Generate time slots for 24 hours
+const generateTimeSlots = () => {
+  const slots = [];
+  for (let i = 0; i < 24; i++) {
+    const hour = i.toString().padStart(2, '0');
+    slots.push(`${hour}:00`);
+  }
+  return slots;
+};
+
+export default function ReminderCalendarPage() {
   const [reminders, setReminders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [dateReminders, setDateReminders] = useState([]);
+  
+  // Calendar state
+  const today = new Date();
+  const [currentDate, setCurrentDate] = useState(today);
+  const [selectedDate, setSelectedDate] = useState(today);
+  const [dailyReminders, setDailyReminders] = useState({});
+  const [timeSlots] = useState(generateTimeSlots());
+  const [upcomingReminders, setUpcomingReminders] = useState([]);
   
   const router = useRouter();
   
@@ -23,9 +43,7 @@ export default function ReminderPage() {
   }, []);
   
   useEffect(() => {
-    if (selectedDate) {
-      fetchDateReminders(selectedDate);
-    }
+    fetchDailyReminders();
   }, [selectedDate]);
   
   const fetchReminders = async () => {
@@ -33,6 +51,23 @@ export default function ReminderPage() {
       setLoading(true);
       const response = await axios.get('/api/reminders');
       setReminders(response.data.data);
+      
+      // Get upcoming reminders (next 7 days)
+      const now = new Date();
+      const nextWeek = new Date();
+      nextWeek.setDate(now.getDate() + 7);
+      
+      const upcoming = response.data.data.filter(reminder => {
+        const reminderDate = new Date(reminder.datetime);
+        return reminderDate >= now && reminderDate <= nextWeek;
+      });
+      
+      // Sort by date
+      upcoming.sort((a, b) => new Date(a.datetime) - new Date(b.datetime));
+      
+      // Limit to 5
+      setUpcomingReminders(upcoming.slice(0, 5));
+      
       setError(null);
     } catch (error) {
       console.error('Error fetching reminders:', error);
@@ -43,104 +78,303 @@ export default function ReminderPage() {
     }
   };
   
-  const fetchDateReminders = async (date) => {
+  const fetchDailyReminders = async () => {
     try {
-      setLoading(true);
-      const formattedDate = date.toISOString().split('T')[0];
-      const response = await axios.get(`/api/reminders?date=${formattedDate}`);
-      setDateReminders(response.data.data);
-      setError(null);
+      const dateString = selectedDate.toISOString().split('T')[0];
+      const response = await axios.get(`/api/reminders?date=${dateString}`);
+      
+      // Group reminders by hour
+      const remindersByHour = {};
+      response.data.data.forEach(reminder => {
+        const date = new Date(reminder.datetime);
+        const hour = date.getHours().toString().padStart(2, '0');
+        
+        if (!remindersByHour[hour]) {
+          remindersByHour[hour] = [];
+        }
+        
+        remindersByHour[hour].push(reminder);
+      });
+      
+      setDailyReminders(remindersByHour);
     } catch (error) {
-      console.error('Error fetching date reminders:', error);
-      setError('Failed to load reminders for this date. Please try again.');
-      toast.error('Failed to load reminders for this date');
-    } finally {
-      setLoading(false);
+      console.error('Error fetching daily reminders:', error);
+      toast.error('Failed to load daily reminders');
     }
   };
   
-  const getDaysInMonth = (year, month) => {
-    return new Date(year, month + 1, 0).getDate();
+  const navigateMonth = (direction) => {
+    setCurrentDate(prevDate => {
+      const newDate = new Date(prevDate);
+      newDate.setMonth(prevDate.getMonth() + direction);
+      return newDate;
+    });
   };
   
-  const getFirstDayOfMonth = (year, month) => {
-    return new Date(year, month, 1).getDay();
-  };
-  
-  const handleDateClick = (date) => {
+  const selectDate = (date) => {
     setSelectedDate(date);
   };
   
-  const handlePrevMonth = () => {
-    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
-    setSelectedDate(null);
-  };
-  
-  const handleNextMonth = () => {
-    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
-    setSelectedDate(null);
-  };
-  
-  const renderCalendar = () => {
+  const renderMonthCalendar = () => {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
-    
     const daysInMonth = getDaysInMonth(year, month);
-    const firstDayOfMonth = getFirstDayOfMonth(year, month);
+    const firstDay = getFirstDayOfMonth(year, month);
     
-    const days = [];
-    
-    // Add empty cells for days before the first day of the month
-    for (let i = 0; i < firstDayOfMonth; i++) {
-      days.push(<div key={`empty-${i}`} className="h-12 border border-gray-100"></div>);
+    // Generate days array with empty slots for proper alignment
+    const days = Array(firstDay).fill(null);
+    for (let i = 1; i <= daysInMonth; i++) {
+      days.push(new Date(year, month, i));
     }
     
-    // Add cells for each day of the month
-    for (let day = 1; day <= daysInMonth; day++) {
-      const date = new Date(year, month, day);
-      const dateString = date.toISOString().split('T')[0];
+    // Check if a day has reminders
+    const dayHasReminder = (day) => {
+      if (!day) return false;
       
-      // Check if there are reminders for this date
-      const hasReminders = reminders.some(reminder => {
-        const reminderDate = new Date(reminder.datetime).toISOString().split('T')[0];
-        return reminderDate === dateString;
+      return reminders.some(reminder => {
+        const reminderDate = new Date(reminder.datetime);
+        return (
+          reminderDate.getFullYear() === day.getFullYear() &&
+          reminderDate.getMonth() === day.getMonth() &&
+          reminderDate.getDate() === day.getDate()
+        );
       });
-      
-      // Check if this is the selected date
-      const isSelected = selectedDate && 
-        selectedDate.getDate() === day && 
-        selectedDate.getMonth() === month && 
-        selectedDate.getFullYear() === year;
-      
-      // Check if this is today
-      const isToday = new Date().toISOString().split('T')[0] === dateString;
-      
-      days.push(
-        <motion.div
-          key={day}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => handleDateClick(date)}
-          className={`h-12 flex flex-col items-center justify-center border cursor-pointer transition-colors duration-200
-            ${isSelected ? 'bg-[#c60000] text-white border-[#c60000]' : 
-              isToday ? 'bg-gray-100 border-gray-300' : 'border-gray-100 hover:bg-gray-50'}`}
-        >
-          <span className={`text-sm ${hasReminders && !isSelected ? 'font-bold text-[#c60000]' : ''}`}>
-            {day}
-          </span>
-          {hasReminders && (
-            <div className={`w-1.5 h-1.5 rounded-full mt-0.5 ${isSelected ? 'bg-white' : 'bg-[#c60000]'}`}></div>
-          )}
-        </motion.div>
-      );
-    }
+    };
     
-    return days;
+    return (
+      <div className="bg-white rounded-lg shadow-md overflow-hidden mb-6">
+        <div className="flex items-center justify-between p-4 bg-gray-50 border-b">
+          <h2 className="text-xl font-semibold text-gray-800">
+            {currentDate.toLocaleString('default', { month: 'long', year: 'numeric' })}
+          </h2>
+          <div className="flex space-x-2">
+            <button 
+              onClick={() => navigateMonth(-1)}
+              className="p-2 rounded-full hover:bg-gray-200"
+            >
+              <FaChevronLeft />
+            </button>
+            <button 
+              onClick={() => {
+                setCurrentDate(new Date());
+                setSelectedDate(new Date());
+              }}
+              className="px-3 py-1 bg-[#c60000] text-white rounded-md hover:bg-[#a50000] transition-colors duration-200"
+            >
+              Today
+            </button>
+            <button 
+              onClick={() => navigateMonth(1)}
+              className="p-2 rounded-full hover:bg-gray-200"
+            >
+              <FaChevronRight />
+            </button>
+          </div>
+        </div>
+        
+        <div className="grid grid-cols-7 bg-gray-100">
+          {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+            <div key={day} className="py-2 text-center text-sm font-medium text-gray-700">
+              {day}
+            </div>
+          ))}
+        </div>
+        
+        <div className="grid grid-cols-7 gap-px bg-gray-200">
+          {days.map((day, index) => (
+            <div 
+              key={index} 
+              className={`min-h-[80px] bg-white ${!day ? 'opacity-50' : ''}`}
+            >
+              {day && (
+                <motion.div
+                  whileHover={{ scale: 0.98 }}
+                  onClick={() => selectDate(day)}
+                  className={`h-full p-2 cursor-pointer hover:bg-gray-50 ${
+                    day.toDateString() === selectedDate.toDateString() ? 'bg-red-50' : 
+                    day.toDateString() === today.toDateString() ? 'bg-orange-50' : ''
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-1">
+                    <span className={`text-sm font-medium ${
+                      day.toDateString() === today.toDateString() ? 'text-[#c60000]' : 
+                      day.toDateString() === selectedDate.toDateString() ? 'text-[#c60000]' : 'text-gray-700'
+                    }`}>
+                      {day.getDate()}
+                    </span>
+                    {dayHasReminder(day) && (
+                      <div className="w-2 h-2 rounded-full bg-[#c60000]"></div>
+                    )}
+                  </div>
+                </motion.div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    );
   };
   
-  const formatTime = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const renderUpcomingReminders = () => {
+    if (upcomingReminders.length === 0) return null;
+    
+    return (
+      <div className="mb-6">
+        <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+          <FaBell className="text-[#c60000] mr-2" />
+          Upcoming Reminders
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+          {upcomingReminders.map(reminder => (
+            <motion.div
+              key={reminder._id}
+              whileHover={{ y: -5, boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)' }}
+              transition={{ duration: 0.2 }}
+              onClick={() => router.push(`/leads/${reminder.leadId._id}`)}
+              className="bg-white rounded-lg shadow-md p-4 border-l-4 border-[#c60000] cursor-pointer"
+            >
+              <div className="flex items-center mb-2">
+                <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-[#c60000] mr-3">
+                  <FaBell />
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500">
+                    {formatDate(new Date(reminder.datetime))}
+                  </p>
+                  <p className="text-sm font-medium">
+                    {new Date(reminder.datetime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </p>
+                </div>
+              </div>
+              <p className="font-medium text-gray-800 mb-2 line-clamp-2">{reminder.message}</p>
+              {reminder.leadId && (
+                <p className="text-xs bg-gray-100 px-2 py-1 rounded-full inline-block">
+                  {reminder.leadId.projectTitle || reminder.leadId.clientName || 'Unknown Lead'}
+                </p>
+              )}
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+  
+  const renderDayView = () => {
+    return (
+      <div className="bg-white rounded-lg shadow-md overflow-hidden">
+        <div className="flex items-center justify-between p-4 bg-gray-50 border-b">
+          <h2 className="text-xl font-semibold text-gray-800 flex items-center">
+            <FaCalendarAlt className="text-[#c60000] mr-2" />
+            {selectedDate.toLocaleDateString('default', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
+          </h2>
+          
+          <div className="flex space-x-2">
+            <button 
+              onClick={() => {
+                const prevDay = new Date(selectedDate);
+                prevDay.setDate(prevDay.getDate() - 1);
+                setSelectedDate(prevDay);
+              }}
+              className="p-2 rounded-full hover:bg-gray-200"
+            >
+              <FaChevronLeft />
+            </button>
+            <button 
+              onClick={() => setSelectedDate(new Date())}
+              className="px-3 py-1 bg-[#c60000] text-white rounded-md hover:bg-[#a50000] transition-colors duration-200"
+            >
+              Today
+            </button>
+            <button 
+              onClick={() => {
+                const nextDay = new Date(selectedDate);
+                nextDay.setDate(nextDay.getDate() + 1);
+                setSelectedDate(nextDay);
+              }}
+              className="p-2 rounded-full hover:bg-gray-200"
+            >
+              <FaChevronRight />
+            </button>
+          </div>
+        </div>
+        
+        {/* Summary of reminders for the day */}
+        <div className="p-4 bg-gray-50 border-b">
+          <div className="flex items-center justify-between">
+            <h3 className="font-medium text-gray-700">
+              {Object.values(dailyReminders).flat().length} Reminders Today
+            </h3>
+            <div className="flex space-x-2">
+              {Object.keys(dailyReminders).length > 0 && (
+                <div className="flex space-x-1">
+                  {Object.keys(dailyReminders).slice(0, 3).map(hour => (
+                    <div 
+                      key={hour} 
+                      className="px-2 py-1 bg-red-100 text-[#c60000] rounded text-xs font-medium"
+                    >
+                      {hour}:00
+                    </div>
+                  ))}
+                  {Object.keys(dailyReminders).length > 3 && (
+                    <div className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs font-medium">
+                      +{Object.keys(dailyReminders).length - 3} more
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+        
+        <div className="overflow-y-auto max-h-[600px]">
+          {timeSlots.map((timeSlot, index) => {
+            const hour = timeSlot.split(':')[0];
+            const remindersForHour = dailyReminders[hour] || [];
+            
+            return (
+              <div 
+                key={timeSlot} 
+                className={`flex border-b ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}
+              >
+                <div className="w-20 p-3 border-r bg-gray-100 flex items-start justify-center">
+                  <div className="flex items-center">
+                    <FaClock className="text-gray-500 mr-1 text-xs" />
+                    <span className="text-sm font-medium text-gray-700">{timeSlot}</span>
+                  </div>
+                </div>
+                
+                <div className="flex-1 min-h-[100px] p-2">
+                  {remindersForHour.length > 0 ? (
+                    <div className="space-y-2">
+                      {remindersForHour.map(reminder => (
+                        <motion.div
+                          key={reminder._id}
+                          whileHover={{ scale: 1.02 }}
+                          onClick={() => router.push(`/leads/${reminder.leadId._id}`)}
+                          className="p-3 bg-red-50 border-l-4 border-[#c60000] rounded-r-md cursor-pointer"
+                        >
+                          <p className="font-medium text-gray-800">{reminder.message}</p>
+                          <div className="flex items-center justify-between mt-1">
+                            <span className="text-sm text-gray-600">
+                              {new Date(reminder.datetime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </span>
+                            {reminder.leadId && (
+                              <span className="text-xs bg-gray-200 px-2 py-1 rounded-full">
+                                {reminder.leadId.projectTitle || reminder.leadId.clientName || 'Unknown Lead'}
+                              </span>
+                            )}
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
   };
   
   return (
@@ -148,101 +382,39 @@ export default function ReminderPage() {
       <LeadsNavbar />
       
       <main className="container mx-auto px-4 py-6">
-        <h1 className="text-2xl font-bold text-gray-800 mb-6">Reminder Calendar</h1>
-        
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Calendar */}
-          <div className="lg:col-span-2">
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <div className="flex items-center justify-between mb-6">
-                <button
-                  onClick={handlePrevMonth}
-                  className="p-2 rounded-md bg-gray-100 hover:bg-gray-200 transition-colors duration-200"
-                >
-                  &lt;
-                </button>
-                
-                <h2 className="text-xl font-semibold text-gray-800">
-                  {currentDate.toLocaleString('default', { month: 'long', year: 'numeric' })}
-                </h2>
-                
-                <button
-                  onClick={handleNextMonth}
-                  className="p-2 rounded-md bg-gray-100 hover:bg-gray-200 transition-colors duration-200"
-                >
-                  &gt;
-                </button>
-              </div>
-              
-              <div className="grid grid-cols-7 gap-1 mb-1">
-                {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
-                  <div key={day} className="h-8 flex items-center justify-center text-sm font-medium text-gray-700">
-                    {day}
-                  </div>
-                ))}
-              </div>
-              
-              <div className="grid grid-cols-7 gap-1">
-                {renderCalendar()}
-              </div>
-            </div>
-          </div>
-          
-          {/* Reminders for Selected Date */}
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow-md p-6">
-              {selectedDate ? (
-                <>
-                  <div className="flex items-center mb-4">
-                    <FaCalendarAlt className="text-[#c60000] mr-2" />
-                    <h2 className="text-xl font-semibold text-gray-800">
-                      {selectedDate.toLocaleDateString('default', { weekday: 'long', month: 'long', day: 'numeric' })}
-                    </h2>
-                  </div>
-                  
-                  {loading ? (
-                    <div className="flex items-center justify-center h-32">
-                      <FaSpinner className="animate-spin text-3xl text-[#c60000]" />
-                    </div>
-                  ) : error ? (
-                    <div className="bg-red-50 text-red-700 p-3 rounded-md border border-red-200">
-                      {error}
-                    </div>
-                  ) : dateReminders.length === 0 ? (
-                    <p className="text-gray-500 italic">No reminders for this date.</p>
-                  ) : (
-                    <div className="space-y-3">
-                      {dateReminders.map((reminder) => (
-                        <motion.div
-                          key={reminder._id}
-                          whileHover={{ scale: 1.02 }}
-                          className="bg-gray-50 p-3 rounded-md border border-gray-200 cursor-pointer"
-                          onClick={() => router.push(`/leads/${reminder.leadId._id}`)}
-                        >
-                          <div className="flex items-center mb-1">
-                            <FaClock className="text-[#c60000] mr-2 text-sm" />
-                            <span className="text-sm text-gray-600">
-                              {formatTime(reminder.datetime)}
-                            </span>
-                          </div>
-                          <p className="font-medium text-gray-800 mb-1">{reminder.message}</p>
-                          <p className="text-sm text-gray-600">
-                            Lead: {reminder.leadId?.projectTitle || 'Unknown'}
-                          </p>
-                        </motion.div>
-                      ))}
-                    </div>
-                  )}
-                </>
-              ) : (
-                <div className="text-center py-8">
-                  <FaCalendarAlt className="text-gray-400 text-4xl mx-auto mb-3" />
-                  <p className="text-gray-500">Select a date to view reminders</p>
-                </div>
-              )}
-            </div>
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center">
+            <FaCalendarAlt className="text-[#c60000] mr-2" />
+            <h1 className="text-2xl font-bold text-gray-800">Reminder Calendar</h1>
           </div>
         </div>
+        
+        {loading ? (
+          <div className="flex items-center justify-center h-64">
+            <FaSpinner className="animate-spin text-4xl text-[#c60000]" />
+          </div>
+        ) : error ? (
+          <div className="bg-red-50 text-red-700 p-4 rounded-md border border-red-200">
+            {error}
+            <button 
+              onClick={fetchReminders}
+              className="ml-2 underline"
+            >
+              Try again
+            </button>
+          </div>
+        ) : (
+          <>
+            {/* Upcoming reminders section */}
+            {renderUpcomingReminders()}
+            
+            {/* Month calendar */}
+            {renderMonthCalendar()}
+            
+            {/* Day view with time slots */}
+            {renderDayView()}
+          </>
+        )}
       </main>
     </div>
   );

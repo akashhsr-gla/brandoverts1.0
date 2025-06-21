@@ -10,7 +10,7 @@ export const POST = withAuth(async (request, context) => {
     
     const id = context.params.id;
     const body = await request.json();
-    const { text } = body;
+    const { text, assignedTo } = body;
     
     if (!text) {
       return NextResponse.json(
@@ -35,6 +35,7 @@ export const POST = withAuth(async (request, context) => {
     lead.steps.push({
       stepNumber,
       text,
+      assignedTo,
       timestamp: new Date()
     });
     

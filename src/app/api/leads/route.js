@@ -3,11 +3,38 @@ import connectToDatabase from '@/lib/mongodb';
 import Lead from '@/models/Lead';
 import { withAuth } from '@/lib/authMiddleware';
 
-// GET all leads
-export const GET = withAuth(async () => {
+// GET all leads with optional filtering
+export const GET = withAuth(async (request) => {
   try {
     await connectToDatabase();
-    const leads = await Lead.find({}).sort({ createdAt: -1 });
+    
+    // Get query parameters
+    const url = new URL(request.url);
+    const status = url.searchParams.get('status');
+    const assignedTo = url.searchParams.get('assignedTo');
+    const search = url.searchParams.get('search');
+    
+    // Build query
+    const query = {};
+    
+    if (status) {
+      query.projectStatus = status;
+    }
+    
+    if (assignedTo) {
+      query.assignedTo = { $regex: assignedTo, $options: 'i' };
+    }
+    
+    if (search) {
+      query.$or = [
+        { clientName: { $regex: search, $options: 'i' } },
+        { projectTitle: { $regex: search, $options: 'i' } },
+        { assignedTo: { $regex: search, $options: 'i' } }
+      ];
+    }
+    
+    // Execute query
+    const leads = await Lead.find(query).sort({ updatedAt: -1 });
     
     return NextResponse.json(
       { success: true, data: leads },
@@ -28,28 +55,8 @@ export const POST = withAuth(async (request) => {
     await connectToDatabase();
     
     const body = await request.json();
-    const { clientName, contactInfo, email, projectTitle, projectDetails } = body;
     
-    if (!clientName || !projectTitle) {
-      return NextResponse.json(
-        { success: false, message: 'Client name and project title are required' },
-        { status: 400 }
-      );
-    }
-    
-    const lead = await Lead.create({
-      clientName,
-      contactInfo: contactInfo || {},
-      email,
-      projectTitle,
-      projectDetails,
-      checkboxes: {
-        titleMeet: false,
-        firstCall: false,
-        closed: false
-      },
-      steps: []
-    });
+    const lead = await Lead.create(body);
     
     return NextResponse.json(
       { success: true, message: 'Lead created successfully', data: lead },

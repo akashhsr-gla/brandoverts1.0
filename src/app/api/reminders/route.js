@@ -3,23 +3,23 @@ import connectToDatabase from '@/lib/mongodb';
 import Reminder from '@/models/Reminder';
 import { withAuth } from '@/lib/authMiddleware';
 
-// GET all reminders
+// GET reminders with optional date filtering
 export const GET = withAuth(async (request) => {
   try {
     await connectToDatabase();
     
     // Get query parameters
-    const { searchParams } = new URL(request.url);
-    const date = searchParams.get('date');
+    const url = new URL(request.url);
+    const dateParam = url.searchParams.get('date');
     
     let query = {};
     
-    // If date is provided, filter reminders for that date
-    if (date) {
-      const startDate = new Date(date);
+    if (dateParam) {
+      // Create date range for the specified date (00:00 to 23:59)
+      const startDate = new Date(dateParam);
       startDate.setHours(0, 0, 0, 0);
       
-      const endDate = new Date(date);
+      const endDate = new Date(dateParam);
       endDate.setHours(23, 59, 59, 999);
       
       query.datetime = {
@@ -28,6 +28,7 @@ export const GET = withAuth(async (request) => {
       };
     }
     
+    // Fetch reminders and populate lead information
     const reminders = await Reminder.find(query)
       .populate('leadId', 'clientName projectTitle')
       .sort({ datetime: 1 });
