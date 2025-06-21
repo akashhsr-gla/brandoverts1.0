@@ -1,10 +1,7 @@
 import mongoose from 'mongoose';
 
-const MONGODB_URI = process.env.MONGODB_URI;
-
-if (!MONGODB_URI) {
-  throw new Error('Please define the MONGODB_URI environment variable');
-}
+// Use environment variable or fallback to a test connection string
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://brandoverts:brandoverts123@cluster0.mongodb.net/brandoverts?retryWrites=true&w=majority';
 
 let cached = global.mongoose;
 
@@ -23,6 +20,7 @@ async function connectToDatabase() {
     };
 
     cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
+      console.log('MongoDB connected successfully');
       return mongoose;
     });
   }
@@ -30,6 +28,7 @@ async function connectToDatabase() {
   try {
     cached.conn = await cached.promise;
   } catch (e) {
+    console.error('MongoDB connection error:', e);
     cached.promise = null;
     throw e;
   }
