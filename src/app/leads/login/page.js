@@ -35,11 +35,18 @@ function LoginForm() {
       }
     } catch (error) {
       setError(error.response?.data?.message || 'Login failed. Please try again.');
-      console.error('Login error:', error);
     } finally {
       setIsLoading(false);
     }
   };
+  
+  // For development: Pre-fill with admin credentials
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'development') {
+      setUsername('BrandovertsAdmin');
+      setPassword('BrandovertsToFinovert123$#@');
+    }
+  }, []);
   
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
